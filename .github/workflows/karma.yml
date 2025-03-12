@@ -24,10 +24,16 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          cd front/
+          npm install
 
       - name: Install Angular CLI
-        run: npm install -g @angular/cli
+        run: |
+          cd front/
+          npm install -g @angular/cli
 
       - name: Run tests
-        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadless
+        run: |
+          cd front/
+          npm run test -- --no-watch --no-progress --browsers=ChromeHeadless
