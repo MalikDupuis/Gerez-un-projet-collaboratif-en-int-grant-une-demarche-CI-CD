@@ -33,7 +33,14 @@ jobs:
           cd front/
           npm install -g @angular/cli
 
-      - name: Run tests
+      - name: Run tests with coverage
         run: |
           cd front/
-          npm run test -- --no-watch --no-progress --browsers=ChromeHeadless
+          npm run test -- --no-watch --no-progress --browsers=ChromeHeadless --code-coverage
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: front/coverage/
+          retention-days: 7
