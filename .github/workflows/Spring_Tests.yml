@@ -33,7 +33,7 @@ jobs:
             maven-${{ runner.os }}-
 
       - name: Move to backend directory
-        run: cd backend
+        run: cd back
 
       - name: Install dependencies
         run: mvn clean install
