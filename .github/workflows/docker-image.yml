@@ -8,11 +8,16 @@ on:
 
 jobs:
 
-  build:
-
+  build-back:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - uses: actions/checkout@v4
+      - name: Build the Docker image for back
+        run: docker build ./back --file ./back/Dockerfile --tag back-image:$(date +%s)
+
+  build-front:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the Docker image for front
+        run: docker build ./front --file ./front/Dockerfile --tag front-image:$(date +%s)
