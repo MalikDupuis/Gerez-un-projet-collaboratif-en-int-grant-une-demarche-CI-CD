@@ -5,38 +5,62 @@ on:
     branches:
       - main
 
-
 jobs:
   build:
     name: Build and analyze
     runs-on: ubuntu-latest
-    
+
+    services:
+      sonarqube:
+        image: sonarqube:lts
+        ports:
+          - 9000:9000
+        env:
+          SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: true
+          SONAR_JDBC_URL: jdbc:postgresql://db:5432/sonarqube
+          SONAR_JDBC_USERNAME: sonar
+          SONAR_JDBC_PASSWORD: sonar
+
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0  # Désactiver les clones superficiels pour une meilleure analyse SonarQube
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: 17
-          distribution: 'zulu' # Alternative distribution options are available.
+          distribution: 'zulu'
+
       - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+
       - name: Cache Maven packages
         uses: actions/cache@v4
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Test SonarQube connection
-        run: curl -I ${{ secrets.SONAR_HOST_URL }}/api/server/version
+
+      - name: Wait for SonarQube to be ready
+        run: |
+          echo "Waiting for SonarQube to be ready..."
+          for i in {1..30}; do
+            if curl -s http://localhost:9000/api/system/status | grep '"status":"UP"'; then
+              echo "SonarQube is up!"
+              break
+            fi
+            echo "Waiting..."
+            sleep 5
+          done
+
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=bobapp -Dsonar.projectName='bobapp'
+          SONAR_HOST_URL: "http://localhost:9000"
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=sdvdgvds -Dsonar.projectName='sdvdgvds'
         working-directory: back
