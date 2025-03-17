@@ -5,6 +5,7 @@ on:
     branches:
       - main
 
+
 jobs:
   build:
     name: Build and analyze
@@ -35,8 +36,5 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: |
-          cd back
-          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-            -Dsonar.projectKey=sdvdgvds \
-            -Dsonar.projectName='sdvdgvds'
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=sdvdgvds -Dsonar.projectName='sdvdgvds'
+        working-directory: back
