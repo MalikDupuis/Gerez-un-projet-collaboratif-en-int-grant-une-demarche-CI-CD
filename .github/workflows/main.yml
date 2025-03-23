@@ -112,13 +112,17 @@ jobs:
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=MalikDupuis_Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD
         working-directory: back 
 
-      - name: Build and analyze front
+     
+  sonarqube:
+    name: SonarQube
+    runs-on: windows-latest
+    steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FRONT }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
         
