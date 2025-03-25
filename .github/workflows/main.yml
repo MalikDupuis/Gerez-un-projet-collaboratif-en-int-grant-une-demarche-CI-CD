@@ -121,7 +121,14 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FRONT }}
         with:
           projectBaseDir: front
-
+          args: >
+            -Dsonar.projectKey=malikdupuis_front
+            -Dsonar.organization=malikdupuis
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.sources=src
+            -Dsonar.language=ts
+            -Dsonar.exclusions=node_modules/**,dist/**
+            -Dsonar.verbose=true
      
   
         
