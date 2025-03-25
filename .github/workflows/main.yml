@@ -121,10 +121,12 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: npm ci  # Utilise npm ci pour une installation plus fiable
+        run: npm install  # Remplace npm ci par npm install
+        working-directory: front 
 
       - name: Install Angular CLI (si nécessaire)
         run: npm install -g @angular/cli
+        working-directory: front 
 
       - name: Set up Java 17
         uses: actions/setup-java@v3
