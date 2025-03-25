@@ -122,6 +122,7 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: front 
 
       - name: Run SonarCloud Scan (Frontend)
         env:
@@ -131,6 +132,7 @@ jobs:
             -Dsonar.projectKey=malikdupuis_front \
             -Dsonar.organization=malikdupuis \
             -Dsonar.host.url=https://sonarcloud.io
+        working-directory: front 
 
      
   
