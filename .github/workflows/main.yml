@@ -121,12 +121,20 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: npm install
-        working-directory: front 
+        run: npm ci  # Utilise npm ci pour une installation plus fiable
 
-      - name: Run SonarCloud Scan (Frontend)
+      - name: Install Angular CLI (si nécessaire)
+        run: npm install -g @angular/cli
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Run SonarCloud Scan
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FRONT  }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FRONT }}
         run: |
           npx sonarqube-scanner \
             -Dsonar.projectKey=malikdupuis_front \
