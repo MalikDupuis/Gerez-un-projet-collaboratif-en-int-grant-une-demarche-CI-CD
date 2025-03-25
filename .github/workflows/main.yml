@@ -112,19 +112,26 @@ jobs:
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=MalikDupuis_Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD
         working-directory: back 
 
-     
-  sonarqube:
-    name: SonarQube
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FRONT }}
-        with:
-          projectBaseDir: front
+      - name: Checkout code
+        uses: actions/checkout@v4
 
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run SonarCloud Scan (Frontend)
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FRONT  }}
+        run: |
+          npx sonarqube-scanner \
+            -Dsonar.projectKey=malikdupuis_front \
+            -Dsonar.organization=malikdupuis \
+            -Dsonar.host.url=https://sonarcloud.io
+
+     
+  
         
