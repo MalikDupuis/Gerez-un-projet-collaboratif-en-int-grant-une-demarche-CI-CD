@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  test:
+  test_front:
     runs-on: ubuntu-latest
 
     steps:
@@ -43,8 +43,9 @@ jobs:
           path: front/coverage/
           retention-days: 7
 
-
-          
+  test_back:
+    runs-on: ubuntu-latest
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
